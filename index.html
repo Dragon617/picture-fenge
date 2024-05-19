@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>四宫格图片分割器-Midjourney图片一键分割4张</title>
     <style>
+        /* 设置全局样式 */
         body {
             font-family: Arial, sans-serif;
             margin: 0;
@@ -13,6 +14,7 @@
             color: #37474f;
         }
 
+        /* 设置容器样式 */
         .container {
             max-width: 90%;
             margin: 20px auto;
@@ -22,6 +24,7 @@
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
         }
 
+        /* 设置标题样式 */
         h2 {
             text-align: center;
             font-size: 24px;
@@ -29,6 +32,7 @@
             color: #00796b;
         }
 
+        /* 设置段落样式 */
         p {
             text-align: center;
             font-size: 16px;
@@ -36,10 +40,12 @@
             color: #546e7a;
         }
 
+        /* 设置表单和输出区样式 */
         form, .output {
             text-align: center;
         }
 
+        /* 设置文件输入框样式 */
         input[type="file"] {
             margin-bottom: 10px;
             display: block;
@@ -54,10 +60,12 @@
             transition: border-color 0.3s ease;
         }
 
+        /* 文件输入框悬停样式 */
         input[type="file"]:hover {
             border-color: #00796b;
         }
 
+        /* 设置按钮样式 */
         button {
             padding: 10px 30px;
             background-color: #00796b;
@@ -69,10 +77,12 @@
             transition: background-color 0.3s ease;
         }
 
+        /* 按钮悬停样式 */
         button:hover {
             background-color: #004d40;
         }
 
+        /* 设置输出图片样式 */
         .output img {
             max-width: 100%;
             margin: 15px 0;
@@ -80,11 +90,13 @@
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
         }
 
+        /* 设置一键保存按钮样式 */
         .save-button {
             margin-top: 20px;
             background-color: #f57c00;
         }
 
+        /* 一键保存按钮悬停样式 */
         .save-button:hover {
             background-color: #e65100;
         }
@@ -94,14 +106,18 @@
     <div class="container">
         <h2>上传一张图片并分割成4张图片</h2>
         <p>分割后的图片，右击另存为即可。</p>
+        <!-- 图片上传表单 -->
         <form>
             <input type="file" id="imageInput" accept="image/*" required>
             <button type="button" onclick="splitImage()">分割图片</button>
         </form>
+        <!-- 显示分割后的图片 -->
         <div class="output" id="outputImages"></div>
+        <!-- 一键保存按钮 -->
         <button class="save-button" id="saveButton" onclick="saveAllImages()" style="display: none;">一键保存所有图片</button>
     </div>
     <script>
+        // 分割图片功能
         function splitImage() {
             var fileInput = document.getElementById('imageInput');
             var files = fileInput.files;
@@ -138,6 +154,7 @@
             reader.readAsDataURL(file);
         }
 
+        // 显示分割后的图片
         function displayParts(parts) {
             var outputDiv = document.getElementById('outputImages');
             outputDiv.innerHTML = '';
@@ -145,18 +162,53 @@
                 var img = document.createElement('img');
                 img.src = partDataUrl;
                 img.id = 'part' + (index + 1);
-                outputDiv.appendChild(img);
+                img.alt = '分割图片 ' + (index + 1);
+
+                // 创建一个容器，包含图片和单独保存按钮
+                var imgContainer = document.createElement('div');
+                imgContainer.style.position = 'relative';
+                imgContainer.style.display = 'inline-block';
+                imgContainer.style.margin = '10px';
+
+                // 创建单独保存按钮
+                var saveButton = document.createElement('button');
+                saveButton.innerText = '保存图片';
+                saveButton.style.position = 'absolute';
+                saveButton.style.bottom = '10px';
+                saveButton.style.left = '50%';
+                saveButton.style.transform = 'translateX(-50%)';
+                saveButton.style.backgroundColor = '#4caf50';
+                saveButton.style.color = '#fff';
+                saveButton.style.border = 'none';
+                saveButton.style.borderRadius = '4px';
+                saveButton.style.cursor = 'pointer';
+                saveButton.style.padding = '5px 10px';
+                saveButton.style.fontSize = '14px';
+                saveButton.onclick = function() {
+                    saveImage(img.src, 'part' + (index + 1) + '.png');
+                };
+
+                // 将图片和保存按钮添加到容器中
+                imgContainer.appendChild(img);
+                imgContainer.appendChild(saveButton);
+                outputDiv.appendChild(imgContainer);
             });
             document.getElementById('saveButton').style.display = 'block';
         }
 
+        // 保存单个图片
+        function saveImage(dataUrl, filename) {
+            var link = document.createElement('a');
+            link.href = dataUrl;
+            link.download = filename;
+            link.click();
+        }
+
+        // 一键保存所有图片
         function saveAllImages() {
             var parts = document.querySelectorAll('.output img');
             parts.forEach(function(img, index) {
-                var link = document.createElement('a');
-                link.href = img.src;
-                link.download = 'part' + (index + 1) + '.png';
-                link.click();
+                saveImage(img.src, 'part' + (index + 1) + '.png');
             });
         }
     </script>
