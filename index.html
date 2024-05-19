@@ -14,7 +14,7 @@
             color: #37474f;
         }
 
-        /* 设置容器样式 */
+        /* 设置容器样式，去掉边框和边界线 */
         .container {
             max-width: 90%;
             margin: 20px auto;
@@ -153,32 +153,35 @@
         <button class="save-button" id="saveButton" onclick="saveAllImages()" style="display: none;">一键保存所有图片</button>
     </div>
     <script>
+        let originalFileName = '';
+
         // 分割图片功能
         function splitImage() {
-            var fileInput = document.getElementById('imageInput');
-            var files = fileInput.files;
+            const fileInput = document.getElementById('imageInput');
+            const files = fileInput.files;
             if (files.length === 0) {
                 alert('请选择一张图片进行上传！');
                 return;
             }
 
-            var file = files[0];
-            var reader = new FileReader();
+            const file = files[0];
+            originalFileName = file.name.split('.').slice(0, -1).join('.'); // 获取源文件名称
+            const reader = new FileReader();
             reader.onload = function(e) {
-                var img = new Image();
+                const img = new Image();
                 img.src = e.target.result;
                 img.onload = function() {
-                    var canvas = document.createElement('canvas');
-                    var ctx = canvas.getContext('2d');
-                    var width = img.width / 2;
-                    var height = img.height / 2;
+                    const canvas = document.createElement('canvas');
+                    const ctx = canvas.getContext('2d');
+                    const width = img.width / 2;
+                    const height = img.height / 2;
 
                     canvas.width = width;
                     canvas.height = height;
 
-                    var parts = [];
-                    for (var i = 0; i < 2; i++) {
-                        for (var j = 0; j < 2; j++) {
+                    const parts = [];
+                    for (let i = 0; i < 2; i++) {
+                        for (let j = 0; j < 2; j++) {
                             ctx.drawImage(img, j * width, i * height, width, height, 0, 0, width, height);
                             parts.push(canvas.toDataURL('image/png'));
                             ctx.clearRect(0, 0, width, height);
@@ -192,23 +195,23 @@
 
         // 显示分割后的图片
         function displayParts(parts) {
-            var outputDiv = document.getElementById('outputImages');
+            const outputDiv = document.getElementById('outputImages');
             outputDiv.innerHTML = '';
-            parts.forEach(function(partDataUrl, index) {
-                var img = document.createElement('img');
+            parts.forEach((partDataUrl, index) => {
+                const img = document.createElement('img');
                 img.src = partDataUrl;
                 img.id = 'part' + (index + 1);
                 img.alt = '分割图片 ' + (index + 1);
 
                 // 创建一个容器，包含图片和单独保存按钮
-                var imgContainer = document.createElement('div');
+                const imgContainer = document.createElement('div');
                 imgContainer.className = 'img-container';
 
                 // 创建单独保存按钮
-                var saveButton = document.createElement('button');
+                const saveButton = document.createElement('button');
                 saveButton.innerText = '保存图片';
                 saveButton.onclick = function() {
-                    saveImage(img.src, 'part' + (index + 1) + '.png');
+                    saveImage(img.src, `${originalFileName}_part${index + 1}.png`);
                 };
 
                 // 将图片和保存按钮添加到容器中
@@ -221,7 +224,7 @@
 
         // 保存单个图片
         function saveImage(dataUrl, filename) {
-            var link = document.createElement('a');
+            const link = document.createElement('a');
             link.href = dataUrl;
             link.download = filename;
             link.click();
@@ -229,19 +232,19 @@
 
         // 一键保存所有图片
         function saveAllImages() {
-            var zip = new JSZip();
-            var parts = document.querySelectorAll('.output img');
-            parts.forEach(function(img, index) {
-                var data = img.src.split(',')[1];
-                var content = atob(data);
-                var byteArray = new Uint8Array(content.length);
-                for (var i = 0; i < content.length; i++) {
+            const zip = new JSZip();
+            const parts = document.querySelectorAll('.output img');
+            parts.forEach((img, index) => {
+                const data = img.src.split(',')[1];
+                const content = atob(data);
+                const byteArray = new Uint8Array(content.length);
+                for (let i = 0; i < content.length; i++) {
                     byteArray[i] = content.charCodeAt(i);
                 }
-                zip.file('part' + (index + 1) + '.png', byteArray, { binary: true });
+                zip.file(`${originalFileName}_part${index + 1}.png`, byteArray, { binary: true });
             });
             zip.generateAsync({ type: 'blob' }).then(function(content) {
-                saveAs(content, 'images.zip');
+                saveAs(content, `${originalFileName}_images.zip`);
             });
         }
     </script>
