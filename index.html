@@ -10,10 +10,64 @@
             font-family: Arial, sans-serif;
             margin: 0;
             padding: 0;
-            background-color: #f5f5f5;
-            color: #333;
             text-align: center;
             line-height: 1.6;
+            background-color: #f5f5f5;
+            color: #333;
+        }
+
+        @media (prefers-color-scheme: dark) {
+            body {
+                background-color: #333;
+                color: #f5f5f5;
+            }
+
+            h1 {
+                color: #5a91fc;
+            }
+
+            h2 {
+                color: #8bc34a;
+            }
+
+            p {
+                color: #ccc;
+            }
+
+            input[type="file"] {
+                background-color: #555;
+                color: #f5f5f5;
+                border-color: #444;
+            }
+
+            input[type="file"]:hover {
+                border-color: #8bc34a;
+                background-color: #666;
+            }
+
+            button {
+                background-color: #8bc34a;
+            }
+
+            button:hover {
+                background-color: #6aaf37;
+            }
+
+            .save-button {
+                background-color: #ff9800;
+            }
+
+            .save-button:hover {
+                background-color: #e67e00;
+            }
+
+            .img-container button {
+                background-color: #1976d2;
+            }
+
+            .img-container button:hover {
+                background-color: #1565c0;
+            }
         }
 
         h1, h2, p {
@@ -137,13 +191,11 @@
     <h2>上传一张图片并分割成4张图片</h2>
     <p>Midjourney图片一键分割，选择保存即可！</p>
 
-    <!-- 图片上传表单 -->
     <div class="form-container">
         <input type="file" id="imageInput" accept="image/*" required onchange="splitImage()">
         <button type="button" onclick="splitImage()">分割图片</button>
     </div>
 
-    <!-- 显示分割后的图片 -->
     <div class="output-container">
         <div class="output" id="outputImages"></div>
         <button class="save-button" id="saveButton" onclick="saveAllImages()" style="display: none;">一键保存所有图片</button>
@@ -155,7 +207,6 @@
         let originalFileName = '';
         let originalFileExtension = '';
 
-        // 分割图片功能
         function splitImage() {
             const fileInput = document.getElementById('imageInput');
             const files = fileInput.files;
@@ -167,7 +218,7 @@
             const file = files[0];
             const fileNameParts = file.name.split('.');
             originalFileName = fileNameParts.slice(0, -1).join('.');
-            originalFileExtension = fileNameParts.pop(); // 获取文件格式
+            originalFileExtension = fileNameParts.pop();
             const reader = new FileReader();
             reader.onload = function(e) {
                 const img = new Image();
@@ -195,7 +246,6 @@
             reader.readAsDataURL(file);
         }
 
-        // 显示分割后的图片
         function displayParts(parts) {
             const outputDiv = document.getElementById('outputImages');
             outputDiv.innerHTML = '';
@@ -205,18 +255,15 @@
                 img.id = 'part' + (index + 1);
                 img.alt = '分割图片 ' + (index + 1);
 
-                // 创建一个容器，包含图片和单独保存按钮
                 const imgContainer = document.createElement('div');
                 imgContainer.className = 'img-container';
 
-                // 创建单独保存按钮
                 const saveButton = document.createElement('button');
                 saveButton.innerText = '保存图片';
                 saveButton.onclick = function() {
                     saveImage(img.src, `${originalFileName}_part${index + 1}.${originalFileExtension}`);
                 };
 
-                // 将图片和保存按钮添加到容器中
                 imgContainer.appendChild(img);
                 imgContainer.appendChild(saveButton);
                 outputDiv.appendChild(imgContainer);
@@ -224,7 +271,6 @@
             document.getElementById('saveButton').style.display = 'block';
         }
 
-        // 保存单个图片
         function saveImage(dataUrl, filename) {
             const link = document.createElement('a');
             link.href = dataUrl;
@@ -232,7 +278,6 @@
             link.click();
         }
 
-        // 一键保存所有图片
         function saveAllImages() {
             const zip = new JSZip();
             const parts = document.querySelectorAll('.output img');
