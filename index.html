@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>四宫格图片分割器-Midjourney图片一键分割4张</title>
+    <title>四宫格图片分割器 - Midjourney图片一键分割4张</title>
     <style>
-        /* 设置全局样式 */
+        /* 全局样式 */
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             margin: 0;
@@ -15,9 +15,9 @@
             line-height: 1.6;
         }
 
-        /* 设置容器样式，去掉边框和边界线 */
+        /* 容器样式 */
         .container {
-            max-width: 90%;
+            max-width: 80%;
             margin: 20px auto;
             padding: 20px;
             background-color: #fff;
@@ -25,7 +25,7 @@
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
         }
 
-        /* 设置标题样式 */
+        /* 标题样式 */
         h2 {
             text-align: center;
             font-size: 28px;
@@ -33,7 +33,7 @@
             color: #4caf50;
         }
 
-        /* 设置段落样式 */
+        /* 段落样式 */
         p {
             text-align: center;
             font-size: 18px;
@@ -41,17 +41,19 @@
             color: #666;
         }
 
-        /* 设置表单和输出区样式 */
-        form, .output {
+        /* 表单和输出区样式 */
+        .form-container,
+        .output-container {
             text-align: center;
+            margin-bottom: 20px;
         }
 
-        /* 设置文件输入框样式 */
+        /* 文件输入框样式 */
         input[type="file"] {
-            margin-bottom: 15px;
             display: block;
             width: 100%;
             padding: 10px;
+            margin-bottom: 15px;
             border: 1px solid #ddd;
             border-radius: 5px;
             background-color: #fff;
@@ -67,7 +69,7 @@
             background-color: #f9f9f9;
         }
 
-        /* 设置按钮样式 */
+        /* 按钮样式 */
         button {
             padding: 12px 35px;
             background-color: #4caf50;
@@ -84,7 +86,7 @@
             background-color: #388e3c;
         }
 
-        /* 设置输出图片样式 */
+        /* 输出图片样式 */
         .output img {
             max-width: 100%;
             margin: 15px 0;
@@ -93,7 +95,7 @@
             transition: transform 0.3s ease;
         }
 
-        /* 设置保存按钮样式 */
+        /* 保存按钮样式 */
         .save-button {
             margin-top: 20px;
             background-color: #f57c00;
@@ -109,7 +111,7 @@
             position: relative;
             display: inline-block;
             margin: 10px;
-            width: calc(50% - 20px); /* 使图片容器适应手机和平板 */
+            width: calc(50% - 20px);
             border-radius: 10px;
             overflow: hidden;
             transition: transform 0.3s ease;
@@ -153,16 +155,22 @@
     <div class="container">
         <h2>上传一张图片并分割成4张图片</h2>
         <p>分割后的图片，右击另存为即可。</p>
+
         <!-- 图片上传表单 -->
-        <form>
-            <input type="file" id="imageInput" accept="image/*" required onchange="splitImage()">
-            <button type="button" onclick="splitImage()">分割图片</button>
-        </form>
+        <div class="form-container">
+            <form>
+                <input type="file" id="imageInput" accept="image/*" required onchange="splitImage()">
+                <button type="button" onclick="splitImage()">分割图片</button>
+            </form>
+        </div>
+
         <!-- 显示分割后的图片 -->
-        <div class="output" id="outputImages"></div>
-        <!-- 一键保存按钮 -->
-        <button class="save-button" id="saveButton" onclick="saveAllImages()" style="display: none;">一键保存所有图片</button>
+        <div class="output-container">
+            <div class="output" id="outputImages"></div>
+            <button class="save-button" id="saveButton" onclick="saveAllImages()" style="display: none;">一键保存所有图片</button>
+        </div>
     </div>
+
     <script>
         let originalFileName = '';
         let originalFileExtension = '';
