@@ -302,27 +302,24 @@
         margin: 0;
         padding: 0;
         height: 2000px; /* 用于模拟有滚动条的页面 */
-        --bg-color: #333; /* 默认背景颜色 */
-        --text-color: #fff; /* 默认文字颜色 */
     }
-    
-    @media (prefers-color-scheme: dark) {
-        body {
-            --bg-color: #222; /* 深色模式背景颜色 */
-            --text-color: #fff; /* 深色模式文字颜色 */
-        }
-    }
-    
     .copyright {
         position: fixed;
         bottom: 10px;
         left: 50%;
         transform: translateX(-50%);
-        background-color: var(--bg-color);
-        color: var(--text-color);
         padding: 10px;
         text-align: center;
         width: 100%;
+        background-color: #333;
+        color: #fff;
+    }
+
+    @media (prefers-color-scheme: light) {
+        .copyright {
+            background-color: #f0f0f0;
+            color: #000;
+        }
     }
 </style>
 </head>
@@ -330,7 +327,7 @@
     <!-- 这里放你的网页内容 -->
     
     <div class="copyright">
-        &copy; 2024 四宫格图片分割器. All Rights Reserved.
+        &copy; 2024 Your Company. All Rights Reserved.
     </div>
 </body>
 </html>
