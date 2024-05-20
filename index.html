@@ -302,14 +302,24 @@
         margin: 0;
         padding: 0;
         height: 2000px; /* 用于模拟有滚动条的页面 */
+        --bg-color: #333; /* 默认背景颜色 */
+        --text-color: #fff; /* 默认文字颜色 */
     }
+    
+    @media (prefers-color-scheme: dark) {
+        body {
+            --bg-color: #222; /* 深色模式背景颜色 */
+            --text-color: #fff; /* 深色模式文字颜色 */
+        }
+    }
+    
     .copyright {
         position: fixed;
-        bottom: 0px;
+        bottom: 10px;
         left: 50%;
         transform: translateX(-50%);
-        background-color: #333;
-        color: #fff;
+        background-color: var(--bg-color);
+        color: var(--text-color);
         padding: 10px;
         text-align: center;
         width: 100%;
